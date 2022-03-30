@@ -19,8 +19,8 @@ void loadConfiguration(const char *filename, Config &config) {
   if (error) {
     Serial.println(F("Failed to read file, using default configuration"));
   }
-  config.sid = doc[0].as<String>();
-  config.password = doc[1].as<String>();
+  config.sid = doc["sid"].as<String>();
+  config.password = doc["password"].as<String>();
   file.close();
 }
 
@@ -35,8 +35,8 @@ void saveConfiguration(const char *filename, const Config &config) {
 
   StaticJsonDocument<512> doc;
 
-  doc[0] = config.sid;
-  doc[1] = config.password;
+  doc["sid"] = config.sid;
+  doc["password"] = config.password;
 
   if (serializeJson(doc, file) == 0) {
     Serial.println(F("Failed to write to file"));
@@ -47,14 +47,16 @@ void saveConfiguration(const char *filename, const Config &config) {
 
 void setup() {
   Serial.begin(115200);
-  if (!SPIFFS.begin(true)) {
-    Serial.println("SPIFFS initialisation failed. Please reboot.");
+  if (!SPIFFS.begin()) {
+    Serial.println("SPIFFS initialisation failed. Please Upload the file system image.");
     while (1) yield();
   }
 
-  wifiConfig.sid = "this_is_my_sid";
-  wifiConfig.password = "this_is_my_pwd";
-  saveConfiguration(configFile, wifiConfig);
+  // uncomment to override the configuration on SPIFFS
+  
+  //wifiConfig.sid = "this_is_my_sid";
+  //wifiConfig.password = "this_is_my_pwd";
+  //saveConfiguration(configFile, wifiConfig);
 
   loadConfiguration(configFile, wifiConfig);
 

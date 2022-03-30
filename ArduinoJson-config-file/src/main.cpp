@@ -5,10 +5,9 @@
 struct Config {
   String sid;
   String password;
-};
+} wifiConfig;
 
 const char *configFile = "/conf.json";
-Config wifiConfig;
 
 void loadConfiguration(const char *filename, Config &config) {
   File file = SPIFFS.open(filename);
@@ -53,7 +52,7 @@ void setup() {
   }
 
   // uncomment to override the configuration on SPIFFS
-  
+
   //wifiConfig.sid = "this_is_my_sid";
   //wifiConfig.password = "this_is_my_pwd";
   //saveConfiguration(configFile, wifiConfig);
